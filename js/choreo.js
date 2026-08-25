@@ -165,7 +165,7 @@ export function applyP(P,t,dt,ctx){
   if(name!==dom.chapterNow){dom.chapterNow=name;dom.typewriter(dom.chapter,name)}
   dom.pct.textContent=Math.round(P*100)+'%';
   dom.ticks.forEach((el,i)=>el.classList.toggle('on',i/(dom.ticks.length-1)<=P+.001));
-  dom.hint.classList.toggle('off',P>.02||intro<1);
+  dom.hint.classList.toggle('on',P<=.02&&intro>=1);
   /* floor counter */
   const fl=clamp(Math.round((camera.position.y-FLOOR0)/FLOOR_H)+1,1,23);
   dom.floor.textContent=String(fl).padStart(2,'0');

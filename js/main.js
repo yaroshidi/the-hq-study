@@ -88,6 +88,8 @@ const INTRO_MS=4200,LOADER_MIN=1500;
 let introStart=null,firstFrameAt=null,loaderOff=false;
 const skipIntro=()=>{ctx.intro=1;introStart=-1;if(!loaderOff){loaderOff=true;loader.classList.add('off')}};
 if(reduced)skipIntro();
+/* opened in a background tab (email link): restart the ring when the tab becomes visible so the entrance plays while someone is looking */
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!loaderOff)firstFrameAt=null});
 function tickIntro(now){
   if(introStart===-1)return;
   if(firstFrameAt===null){firstFrameAt=now;return}
