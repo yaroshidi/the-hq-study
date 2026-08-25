@@ -81,7 +81,22 @@ addEventListener('keydown',e=>{
 });
 
 /* ---------------- loop ---------------- */
-const ctx={THREE,camera,scene,renderer,aldar,world,dom,mouse,ray:null,vel:0,current:0,W,H};
+const ctx={THREE,camera,scene,renderer,aldar,world,dom,mouse,ray:null,vel:0,current:0,W,H,intro:0};
+/* loader + entrance: the ring draws while the first frames compile, then the camera descends in */
+const loader=$('loader'),loaderRing=$('loaderRing');
+const INTRO_MS=4200,LOADER_MIN=1500;
+let introStart=null,firstFrameAt=null,loaderOff=false;
+const skipIntro=()=>{ctx.intro=1;introStart=-1;if(!loaderOff){loaderOff=true;loader.classList.add('off')}};
+if(reduced)skipIntro();
+function tickIntro(now){
+  if(introStart===-1)return;
+  if(firstFrameAt===null){firstFrameAt=now;return}
+  const lp=clamp((now-firstFrameAt)/LOADER_MIN,0,1);
+  loaderRing.style.strokeDashoffset=(1-lp).toFixed(3);
+  if(lp<1)return;
+  if(!loaderOff){loaderOff=true;loader.classList.add('off');introStart=now}
+  ctx.intro=clamp((now-introStart)/INTRO_MS,0,1);
+}
 let last=performance.now();
 const frameTimes=[];
 function step(now,forceP){
@@ -105,6 +120,7 @@ function step(now,forceP){
   world.tick(t);
   applyP(P,t,dt,ctx);
   renderer.render(scene,camera);
+  tickIntro(now);
   return P;
 }
 function frame(now){
@@ -116,9 +132,11 @@ function frame(now){
 
 /* manual drive for verification (hidden-tab rAF trap) */
 window.__ALDAR={
-  drive(p){const P=step(performance.now(),p);return 'P='+P.toFixed(3)},
+  drive(p){skipIntro();const P=step(performance.now(),p);return 'P='+P.toFixed(3)},
   /* freeze P for screenshots without scrolling the document (the capture tool mis-clips fixed layers when scrolled) */
-  freeze(p){frozenP=p;if(p!==null){scrollTo(0,0);step(performance.now(),p)}return 'frozen '+p},
+  freeze(p){frozenP=p;if(p!==null){if(p>0.001)skipIntro();scrollTo(0,0);step(performance.now(),p)}return 'frozen '+p},
+  skipIntro(){skipIntro();return 'intro skipped'},
+  intro:()=>ctx.intro,
   mouse(x,y){mouse.tx=x;mouse.ty=y;mouse.x=x;mouse.y=y;rayLive=true;return 'mouse'},
   stats(){const a=frameTimes.slice();a.sort((x,y)=>x-y);return {n:a.length,med:a[a.length>>1],p95:a[Math.floor(a.length*.95)],tris:renderer.info.render.triangles,calls:renderer.info.render.calls,counts:aldar.counts}},
   TOTAL:()=>TOTAL,

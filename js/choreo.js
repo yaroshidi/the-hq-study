@@ -92,18 +92,24 @@ function capHit(ray,out){
   return best;
 }
 
+/* entrance before any scroll: descend from high and far behind the building to the edge-on pose */
+const INTRO_POS=new THREE.Vector3(820,230,-260),INTRO_LOOK=new THREE.Vector3(0,30,0);
+const smoother=x=>x*x*x*(x*(x*6-15)+10);
 export function applyP(P,t,dt,ctx){
   const {camera,aldar,world,dom,mouse,vel,current,W,H,renderer,ray}=ctx;
+  const intro=ctx.intro===undefined?1:ctx.intro;
+  const ie=smoother(clamp(intro,0,1));
   /* camera */
   sampleV3(CAM_POS,P,_pos);
   sampleV3(CAM_LOOK,P,_look);
+  if(ie<1){_pos.lerpVectors(INTRO_POS,_pos,ie);_look.lerpVectors(INTRO_LOOK,_look,ie)}
   const inside=S(P,.195,.215)*(1-S(P,.46,.48));
   const lift=S(P,.29,.31)*(1-S(P,.425,.44));
   _look.x+=mouse.x*L(6,1.2,inside);_look.y-=mouse.y*L(4,1,inside);
   camera.position.copy(_pos);
   camera.lookAt(_look);
   camera.rotation.z+=sampleF(ROLL,P)+clamp(vel*.00001,-.02,.02);
-  camera.fov=40+clamp(vel*.0004,-3,5);
+  camera.fov=L(54,40,ie)+clamp(vel*.0004,-3,5);
   camera.updateProjectionMatrix();
   aldar.uniforms.uCamPos.value.copy(camera.position);
 
@@ -116,7 +122,7 @@ export function applyP(P,t,dt,ctx){
   aldar.uniforms.uSunDir.value.copy(world.sunVec);
   aldar.uniforms.uSunK.value=S(el,-2,8);
   aldar.setEnv(1-world.nightK*.85);
-  aldar.setGlow(sampleF(GLOW,P));
+  aldar.setGlow(sampleF(GLOW,P),L(-20,140,S(intro,.22,.85)));
   world.setDust(sampleF(DUST,P),t);
 
   /* floors part for the camera during the ascent */
@@ -150,14 +156,16 @@ export function applyP(P,t,dt,ctx){
     b.style.visibility='visible';
     b.style.top=b._top+'px';
     const dy=Math.abs(sy+90-H/2);
-    b.style.opacity=clamp(1.5-dy/(H*.6),0,1).toFixed(3);
+    const textK=b.id==='b0'?S(intro,.55,1):1;
+    b.style.opacity=(clamp(1.5-dy/(H*.6),0,1)*textK).toFixed(3);
+    if(b.id==='b0')b.style.transform=`translateY(${(1-textK)*46}px)`;
   }
   let name=CHAPTERS[0][1];
   for(const c of CHAPTERS)if(P>=c[0])name=c[1];
   if(name!==dom.chapterNow){dom.chapterNow=name;dom.typewriter(dom.chapter,name)}
   dom.pct.textContent=Math.round(P*100)+'%';
   dom.ticks.forEach((el,i)=>el.classList.toggle('on',i/(dom.ticks.length-1)<=P+.001));
-  dom.hint.classList.toggle('off',P>.02);
+  dom.hint.classList.toggle('off',P>.02||intro<1);
   /* floor counter */
   const fl=clamp(Math.round((camera.position.y-FLOOR0)/FLOOR_H)+1,1,23);
   dom.floor.textContent=String(fl).padStart(2,'0');

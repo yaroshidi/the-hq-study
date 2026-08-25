@@ -136,7 +136,7 @@ export function buildAldar(opts={}){
     uSkyTop:{value:new THREE.Color('#0a1424')},uSkyHorizon:{value:new THREE.Color('#1a2a44')},
     uGlow:{value:1},uXrayPos:{value:new THREE.Vector3(0,-999,0)},uXrayR:{value:0},
     uEntryPos:{value:new THREE.Vector3(10,20.2,capZ(10,20.2-CY))},uEntryR:{value:0},
-    uCamPos:{value:new THREE.Vector3()},uFade:{value:1},uEnvK:{value:.2},
+    uCamPos:{value:new THREE.Vector3()},uFade:{value:1},uEnvK:{value:.2},uGlowY:{value:200},
     fogColor:{value:new THREE.Color('#0a1220')},fogDensity:{value:.0012},
   };
   const paneMat=new THREE.ShaderMaterial({
@@ -155,7 +155,7 @@ export function buildAldar(opts={}){
         gl_Position=projectionMatrix*mv;
       }`,
     fragmentShader:`
-      uniform float uTime,uSunK,uGlow,uXrayR,uEntryR,uFade,uEnvK,fogDensity;
+      uniform float uTime,uSunK,uGlow,uXrayR,uEntryR,uFade,uEnvK,fogDensity,uGlowY;
       uniform vec3 uSunDir,uSkyTop,uSkyHorizon,uXrayPos,uEntryPos,uCamPos,fogColor;
       varying vec3 vWorld;varying vec3 vNormal;varying vec2 vUv;varying float vSeed;varying float vStrip;
       varying vec2 vScale;varying float vDepth;
@@ -177,7 +177,7 @@ export function buildAldar(opts={}){
         float fy=fract((vWorld.y-${FLOOR0.toFixed(2)})/${FLOOR_H.toFixed(2)});
         float band=smoothstep(.50,.72,fy)*(1.0-smoothstep(.86,.98,fy));
         float floorId=floor((vWorld.y-${FLOOR0.toFixed(2)})/${FLOOR_H.toFixed(2)});
-        float lit=step(.28,h1(floorId*3.7+floor(vSeed*.11)));
+        float lit=step(.28,h1(floorId*3.7+floor(vSeed*.11)))*(1.0-smoothstep(uGlowY-2.0,uGlowY+2.0,vWorld.y));
         float warm=.55+.45*h1(vSeed*2.3);
         col+=vec3(1.0,.56,.26)*band*lit*warm*uGlow*(1.0-vStrip*.5)*.5;
         col+=vec3(1.0,.8,.55)*uGlow*.025;
@@ -531,7 +531,7 @@ export function buildAldar(opts={}){
       for(const h of halves){h.userData.openX=h.userData.side*o*62;if(lastTear<=0)h.position.x=h.userData.openX}
     }
   }
-  function setGlow(k){paneU.uGlow.value=k;floorMat.emissiveIntensity=.35*k+.02;stripMat.emissiveIntensity=.3+1.6*k}
+  function setGlow(k,glowY=200){paneU.uGlow.value=k;paneU.uGlowY.value=glowY;floorMat.emissiveIntensity=.35*k+.02;stripMat.emissiveIntensity=.3+1.6*k}
   const xrayLight=new THREE.PointLight('#ffe2b8',0,90,1.5);group.add(xrayLight);
   const _xn=new THREE.Vector3();
   function setXray(pos,r,torch=true){
