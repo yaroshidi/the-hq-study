@@ -60,7 +60,7 @@ function resize(){
   $('spacer').style.height=(TOTAL+H)+'px';
   camera.aspect=W/H;camera.updateProjectionMatrix();
   renderer.setSize(W,H);
-  dom.blocks.forEach(b=>{b._top=parseFloat(b.dataset.at)*TOTAL+parseFloat(b.dataset.dy||0)*H});
+  dom.blocks.forEach(b=>{b._top=parseFloat(b.dataset.at)*TOTAL+parseFloat(b.dataset.dy||0)*H;if(b.id==='b0')b._top=Math.max(b._top,110);if(b.id==='b13')b._top=TOTAL+(phone?.34:.16)*H});
   if(oldP)scrollTo(0,oldP*TOTAL);
 }
 addEventListener('resize',resize);

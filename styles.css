@@ -91,17 +91,42 @@ header{position:fixed;top:0;left:0;right:0;height:60px;display:flex;align-items:
 
 @media (max-width:820px){
   :root{--gutter:7vw}
-  .rail-l{left:16px}.rail-r{right:16px}
-  #chapter{top:auto;bottom:58px}
+  .rail-l{left:12px}.rail-r{right:12px}
+  /* blocks are centred in their beats, so the chapter label is safe under the header */
+  #chapter{top:82px;left:var(--gutter);font-size:9px;letter-spacing:.24em}
   #chapter::before{display:none}
   #hint{bottom:34px}
-  #prog{right:8px}
-  .blk h1{font-size:clamp(30px,8.6vw,50px)}
-  .blk{max-width:86vw}
-  .blk.row h1{font-size:clamp(22px,6vw,34px)}
-  #b12 h1{font-size:clamp(36px,10vw,60px)}
-  header{padding:0 14px}
+  #hint span{font-size:10px;letter-spacing:.28em}
+  /* rail hugs the edge and stays out of the text column */
+  #prog{right:5px;gap:5px}
+  #prog i{width:6px}
+  #prog i.on{width:10px}
+  #pct{font-size:9px;margin:5px 0}
+  /* type scale for a 360 to 430 px column */
+  .blk{max-width:84vw}
+  .blk.c{max-width:84vw}
+  .blk h1{font-size:clamp(26px,7.4vw,40px);line-height:1.1}
+  .blk .eyebrow{font-size:9px;letter-spacing:.2em;padding:4px 7px;margin-bottom:14px}
+  .blk .sub{font-size:9.5px;letter-spacing:.16em;line-height:1.9;margin-top:16px}
+  .counter{font-size:clamp(26px,7vw,34px);margin-top:16px}
+  .counter small{font-size:10px;letter-spacing:.2em;margin-right:8px}
+  .blk.row h1{font-size:clamp(20px,5.6vw,30px)}
+  .blk.c h1{font-size:clamp(24px,6.6vw,36px)}
+  #b12 h1{font-size:clamp(28px,7.8vw,44px)}
+  #b13 svg{width:34px;height:34px;margin-bottom:6px}
+  #b13 .cta{margin-top:26px;padding:13px 20px;font-size:10px;letter-spacing:.22em}
+  #b13 .foot{margin-top:26px;font-size:8px;letter-spacing:.12em;line-height:1.8}
+  .co{display:none}
+  header{padding:0 14px;height:54px}
+  .brand span{font-size:10px;letter-spacing:.28em}
   #topBtn{display:none}
+}
+/* short viewports (landscape phones, small laptops): keep the hero under the header */
+@media (max-height:520px){
+  .blk h1{font-size:clamp(22px,4.2vw,40px)}
+  #b13 .cta{margin-top:16px}
+  #b13 .foot{margin-top:14px}
+}
 }
 
 /* ---------- loader ---------- */

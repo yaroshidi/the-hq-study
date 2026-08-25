@@ -157,7 +157,8 @@ export function applyP(P,t,dt,ctx){
     b.style.top=b._top+'px';
     const dy=Math.abs(sy+90-H/2);
     const textK=b.id==='b0'?S(intro,.55,1):1;
-    b.style.opacity=(clamp(1.5-dy/(H*.6),0,1)*textK).toFixed(3);
+    const topK=sy<150?clamp((sy-40)/110,0,1):1;   /* fade out before passing under the header */
+    b.style.opacity=(clamp(1.5-dy/(H*.6),0,1)*textK*topK).toFixed(3);
     if(b.id==='b0')b.style.transform=`translateY(${(1-textK)*46}px)`;
   }
   let name=CHAPTERS[0][1];
