@@ -1,0 +1,13 @@
+Aldar HQ architectural study
+
+Architecture: MZ Architects. This model is an illustrative reconstruction from public project descriptions, photographs and drawings. It is an independent concept study by Yar al-Roshidi.
+
+Architecture reference: https://www.archdaily.com/240524/al-dar-headquarters-mz-architects
+Facade reference: https://www.permasteelisagroup.com/historic-project/aldar-hq-building/
+
+Lighting: Kloppenheim 06 (Pure Sky), Greg Zaal and Jarod Guest, Poly Haven. CC0.
+https://polyhaven.com/a/kloppenheim_06_puresky
+Source: 2K HDR downloaded September 13, 2026.
+
+Renderer: Three.js r169. MIT license is included at vendor/three/LICENSE.
+Landscape and interior details are an interpretation for this study.
