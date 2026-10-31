@@ -123,9 +123,6 @@ main, .chapter-nav { transition: opacity .25s, visibility .25s; }
   .chapter-nav button { gap: 8px; }
   .bottom-location { display: none; }
   .hero-note { right: calc(var(--gutter) + 20px); }
-  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description, .detail-rule { position: relative; }
-  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description, .detail-rule { isolation: isolate; }
-  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description::before, .detail-rule::before { content: ''; position: absolute; inset: -30px -42px; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(244, 242, 234, .9), rgba(244, 242, 234, .72) 55%, rgba(244, 242, 234, 0)); }
 }
 @media (max-width: 759px) {
   :root { --gutter: 24px; }
