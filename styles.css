@@ -123,8 +123,9 @@ main, .chapter-nav { transition: opacity .25s, visibility .25s; }
   .chapter-nav button { gap: 8px; }
   .bottom-location { display: none; }
   .hero-note { right: calc(var(--gutter) + 20px); }
-  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description { background: rgba(244, 242, 234, .92); box-shadow: 0 0 0 10px rgba(244, 242, 234, .92); }
-  .detail-rule { background: rgba(244, 242, 234, .92); box-shadow: 0 0 0 10px rgba(244, 242, 234, .92); }
+  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description, .detail-rule { position: relative; }
+  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description, .detail-rule { isolation: isolate; }
+  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description::before, .detail-rule::before { content: ''; position: absolute; inset: -30px -42px; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(244, 242, 234, .9), rgba(244, 242, 234, .72) 55%, rgba(244, 242, 234, 0)); }
 }
 @media (max-width: 759px) {
   :root { --gutter: 24px; }
@@ -148,7 +149,7 @@ main, .chapter-nav { transition: opacity .25s, visibility .25s; }
   .scroll-cue-line { height: 28px; }
   .chapter-description { max-width: 270px; font-size: 12px; line-height: 1.55; margin-top: 20px; }
   .detail-rule { display: none; }
-  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description { background: rgba(244, 242, 234, .9); box-shadow: 0 0 0 10px rgba(244, 242, 234, .9); margin-top: 28px; }
+  .chapter:not(.chapter-hero):not(.chapter-return) .chapter-description { margin-top: 28px; }
   .model-note { font-size: 8px; margin-top: 22px; }
   .chapter-return .chapter-copy { top: max(90px, 10.5svh); }
   .chapter-nav { right: 8px; top: 50%; }
@@ -169,13 +170,17 @@ main, .chapter-nav { transition: opacity .25s, visibility .25s; }
   .project-facts dd { font-size: 27px; }
   .project-facts dd span { font-size: 12px; }
   .project-link { font-size: 9px; margin-top: 16px; }
-  .study-footer { bottom: 98px; gap: 15px; padding: 12px 14px; border: 0; background: rgba(244, 242, 234, .91); font-size: 9px; line-height: 1.75; align-items: flex-start; }
+  .study-footer { bottom: 98px; gap: 15px; padding: 12px 14px; border: 0; font-size: 9px; line-height: 1.75; align-items: flex-start; }
   .study-byline { max-width: 190px; }
   .contact-link { gap: 12px; padding: 0; white-space: nowrap; font-size: 10px; }
   #annotations { max-width: 185px; padding: 9px 12px; gap: 8px; }
   #annotation-title { font-size: 8px; }
   #annotation-detail { font-size: 9px; }
-  .project-facts, .project-link { background: rgba(244, 242, 234, .91); box-shadow: 0 0 0 8px rgba(244, 242, 234, .91); }
+  .project-facts, .project-link { position: relative; }
+  .project-facts, .project-link { isolation: isolate; }
+  .project-facts::before, .project-link::before { content: ''; position: absolute; inset: -24px -36px; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(244, 242, 234, .9), rgba(244, 242, 234, .72) 55%, rgba(244, 242, 234, 0)); }
+  .study-footer { isolation: isolate; }
+  .study-footer::before { content: ''; position: absolute; inset: -18px -28px; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(244, 242, 234, .9), rgba(244, 242, 234, .72) 55%, rgba(244, 242, 234, 0)); }
 }
 @media (max-width: 380px) {
   :root { --gutter: 20px; }
@@ -224,8 +229,10 @@ main, .chapter-nav { transition: opacity .25s, visibility .25s; }
   .project-facts dt { font-size: 8px; }
   .project-facts dd { margin-top: 6px; font-size: 22px; }
   .project-link { margin-top: 8px; padding: 8px 0; font-size: 9px; }
-  .study-footer { left: auto; right: 70px; bottom: 82px; width: 39%; padding: 10px 12px; border: 0; background: rgba(244, 242, 234, .94); gap: 12px; font-size: 9px; }
+  .study-footer { left: auto; right: 70px; bottom: 82px; width: 39%; padding: 10px 12px; border: 0; gap: 12px; font-size: 9px; }
   .contact-link { white-space: nowrap; font-size: 10px; gap: 10px; }
+  .study-footer { isolation: isolate; }
+  .study-footer::before { content: ''; position: absolute; inset: -18px -28px; z-index: -1; pointer-events: none; background: radial-gradient(closest-side, rgba(244, 242, 234, .9), rgba(244, 242, 234, .72) 55%, rgba(244, 242, 234, 0)); }
   .chapter-nav { right: max(6px, env(safe-area-inset-right)); }
   .chapter-nav button { height: 44px; min-width: 44px; padding: 0 3px; }
   .nav-name, .nav-index { display: none; }
